@@ -37,11 +37,12 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
     try {
       setIsSubmitting(true);
       //console.log(data.title, data.description);
-      await axios.post("/api/issues", data);
+      if (issue) await axios.patch("/api/issues/" + issue.id, data);
+      else await axios.post("/api/issues", data);
       router.push("/issues");
     } catch (error) {
       setIsSubmitting(false);
-      //console.log(error);
+      console.log(error);
       setError("An Unexpected error occurred");
     }
   });
@@ -71,7 +72,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button disabled={isSubmitting}>
-          Submit new issue
+          {issue ? "Update Issue" : "Submit new issue"}{" "}
           {isSubmitting && <Spinner />}
         </Button>
       </form>
