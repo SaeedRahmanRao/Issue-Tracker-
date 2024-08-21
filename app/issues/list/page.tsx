@@ -28,9 +28,13 @@ const IssuePage = async ({ searchParams }: Props) => {
       className: "hidden md:table-cell",
     },
   ];
+
   const issues = await prisma.issue.findMany({
     where: {
       ...(searchParams.status !== "all" && { status: searchParams.status }),
+    },
+    orderBy: {
+      [searchParams.orderBy]: "asc",
     },
   });
   return (
